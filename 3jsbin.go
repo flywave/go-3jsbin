@@ -17,7 +17,7 @@ var (
 
 type FlatTriangle struct {
 	Vertices [][3]uint32
-	Material []int16
+	Material []uint16
 }
 
 func (obj *FlatTriangle) GetVertices() []uint32 {
@@ -30,13 +30,13 @@ func (obj *FlatTriangle) GetVertices() []uint32 {
 	return ret
 }
 
-func (obj *FlatTriangle) GetMaterials() []int16 {
+func (obj *FlatTriangle) GetMaterials() []uint16 {
 	return obj.Material
 }
 
 func (obj *FlatTriangle) encode(wr io.Writer) error {
 	if len(obj.Vertices) != len(obj.Material) {
-		return errors.New("Vertices size must eq")
+		return errors.New("vertices size must eq")
 	}
 
 	err := binary.Write(wr, littleEndian, obj.GetVertices())
@@ -58,21 +58,16 @@ func (obj *FlatTriangle) decode(rd io.ReadSeeker, size uint32) error {
 	if err != nil {
 		return err
 	}
-	err = obj.SetVertices(verbuf)
-	if err != nil {
-		return err
-	}
+	return obj.SetVertices(verbuf)
+}
 
-	mtlbuf := make([]int16, size)
-	err = binary.Read(rd, littleEndian, mtlbuf)
+func (obj *FlatTriangle) decodeMtl(rd io.ReadSeeker, size uint32) error {
+	mtlbuf := make([]uint16, size)
+	err := binary.Read(rd, littleEndian, mtlbuf)
 	if err != nil {
 		return err
 	}
-	err = obj.SetMaterial(mtlbuf)
-	if err != nil {
-		return err
-	}
-	return nil
+	return obj.SetMaterial(mtlbuf)
 }
 
 func (obj *FlatTriangle) SetVertices(vers interface{}) error {
@@ -102,10 +97,10 @@ func (obj *FlatTriangle) SetVertices(vers interface{}) error {
 
 func (obj *FlatTriangle) SetMaterial(vers interface{}) error {
 	switch t := vers.(type) {
-	case []int16:
+	case []uint16:
 		obj.Material = t
 	default:
-		return errors.New("Material must []int16")
+		return errors.New("Material must []uint16")
 	}
 	return nil
 }
@@ -373,7 +368,7 @@ func (obj *SmoothUVTriangle) SetUVs(vers interface{}) error {
 
 type FlatQuad struct {
 	Vertices [][4]uint32
-	Material []int16
+	Material []uint16
 }
 
 func (obj *FlatQuad) GetVertices() []uint32 {
@@ -387,7 +382,7 @@ func (obj *FlatQuad) GetVertices() []uint32 {
 	return ret
 }
 
-func (obj *FlatQuad) GetMaterials() []int16 {
+func (obj *FlatQuad) GetMaterials() []uint16 {
 	return obj.Material
 }
 
@@ -414,21 +409,16 @@ func (obj *FlatQuad) decode(rd io.ReadSeeker, size uint32) error {
 	if err != nil {
 		return err
 	}
-	err = obj.SetVertices(verbuf)
-	if err != nil {
-		return err
-	}
+	return obj.SetVertices(verbuf)
+}
 
-	mtlbuf := make([]int16, size)
-	err = binary.Read(rd, littleEndian, mtlbuf)
+func (obj *FlatQuad) decodeMtl(rd io.ReadSeeker, size uint32) error {
+	mtlbuf := make([]uint16, size)
+	err := binary.Read(rd, littleEndian, mtlbuf)
 	if err != nil {
 		return err
 	}
-	err = obj.SetMaterial(mtlbuf)
-	if err != nil {
-		return err
-	}
-	return nil
+	return obj.SetMaterial(mtlbuf)
 }
 
 func (obj *FlatQuad) SetVertices(vers interface{}) error {
@@ -460,10 +450,10 @@ func (obj *FlatQuad) SetVertices(vers interface{}) error {
 
 func (obj *FlatQuad) SetMaterial(vers interface{}) error {
 	switch t := vers.(type) {
-	case []int16:
+	case []uint16:
 		obj.Material = t
 	default:
-		return errors.New("Material must []int16")
+		return errors.New("Material must []uint16")
 	}
 	return nil
 }
@@ -996,7 +986,10 @@ func Decode(rd io.ReadSeeker) (*Binobj, error) {
 		if err != nil {
 			return nil, err
 		}
-
+		err = obj.FlatTriangle.decodeMtl(rd, obj.Header.TriFlatCount)
+		if err != nil {
+			return nil, err
+		}
 		pading := handlePadding(obj.Header.TriFlatCount * 2)
 		if pading > 0 {
 			rd.Seek(int64(pading), io.SeekCurrent)
@@ -1008,7 +1001,10 @@ func Decode(rd io.ReadSeeker) (*Binobj, error) {
 		if err != nil {
 			return nil, err
 		}
-
+		err = obj.SmoothTriangle.decodeMtl(rd, obj.Header.TriSmoothCount)
+		if err != nil {
+			return nil, err
+		}
 		pading := handlePadding(obj.Header.TriSmoothCount * 2)
 		if pading > 0 {
 			rd.Seek(int64(pading), io.SeekCurrent)
@@ -1020,7 +1016,10 @@ func Decode(rd io.ReadSeeker) (*Binobj, error) {
 		if err != nil {
 			return nil, err
 		}
-
+		err = obj.FlatUVTriangle.decodeMtl(rd, obj.Header.TriFlatUVCount)
+		if err != nil {
+			return nil, err
+		}
 		pading := handlePadding(obj.Header.TriFlatUVCount * 2)
 		if pading > 0 {
 			rd.Seek(int64(pading), io.SeekCurrent)
@@ -1032,7 +1031,10 @@ func Decode(rd io.ReadSeeker) (*Binobj, error) {
 		if err != nil {
 			return nil, err
 		}
-
+		err = obj.SmoothUVTriangle.decodeMtl(rd, obj.Header.TriSmoothUVCount)
+		if err != nil {
+			return nil, err
+		}
 		pading := handlePadding(obj.Header.TriSmoothUVCount * 2)
 		if pading > 0 {
 			rd.Seek(int64(pading), io.SeekCurrent)
@@ -1044,7 +1046,10 @@ func Decode(rd io.ReadSeeker) (*Binobj, error) {
 		if err != nil {
 			return nil, err
 		}
-
+		err = obj.FlatQuad.decodeMtl(rd, obj.Header.QuadFlatCount)
+		if err != nil {
+			return nil, err
+		}
 		pading := handlePadding(obj.Header.QuadFlatCount * 2)
 		if pading > 0 {
 			rd.Seek(int64(pading), io.SeekCurrent)
@@ -1053,6 +1058,10 @@ func Decode(rd io.ReadSeeker) (*Binobj, error) {
 
 	if obj.Header.QuadSmoothCount > 0 {
 		err = obj.SmoothQuad.decode(rd, obj.Header.QuadSmoothCount)
+		if err != nil {
+			return nil, err
+		}
+		err = obj.SmoothQuad.decodeMtl(rd, obj.Header.QuadSmoothCount)
 		if err != nil {
 			return nil, err
 		}
@@ -1068,6 +1077,10 @@ func Decode(rd io.ReadSeeker) (*Binobj, error) {
 		if err != nil {
 			return nil, err
 		}
+		err = obj.FlatUVQuad.decodeMtl(rd, obj.Header.QuadFlatUVCount)
+		if err != nil {
+			return nil, err
+		}
 
 		pading := handlePadding(obj.Header.QuadFlatUVCount * 2)
 		if pading > 0 {
@@ -1077,6 +1090,10 @@ func Decode(rd io.ReadSeeker) (*Binobj, error) {
 
 	if obj.Header.QuadSmoothUVCount > 0 {
 		err = obj.SmoothUVQuad.decode(rd, obj.Header.QuadSmoothUVCount)
+		if err != nil {
+			return nil, err
+		}
+		err = obj.SmoothUVQuad.decodeMtl(rd, obj.Header.QuadSmoothUVCount)
 		if err != nil {
 			return nil, err
 		}
