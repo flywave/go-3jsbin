@@ -36,7 +36,7 @@ func (obj *FlatTriangle) GetMaterials() []uint16 {
 
 func (obj *FlatTriangle) encode(wr io.Writer) error {
 	if len(obj.Vertices) != len(obj.Material) {
-		return errors.New("vertices size must eq")
+		return errors.New("Vertices size must eq")
 	}
 
 	err := binary.Write(wr, littleEndian, obj.GetVertices())
@@ -374,10 +374,10 @@ type FlatQuad struct {
 func (obj *FlatQuad) GetVertices() []uint32 {
 	ret := make([]uint32, len(obj.Vertices)*4)
 	for i := range obj.Vertices {
-		ret[i*3] = obj.Vertices[i][0]
-		ret[i*3+1] = obj.Vertices[i][1]
-		ret[i*3+2] = obj.Vertices[i][2]
-		ret[i*3+3] = obj.Vertices[i][3]
+		ret[i*4] = obj.Vertices[i][0]
+		ret[i*4+1] = obj.Vertices[i][1]
+		ret[i*4+2] = obj.Vertices[i][2]
+		ret[i*4+3] = obj.Vertices[i][3]
 	}
 	return ret
 }
@@ -429,10 +429,10 @@ func (obj *FlatQuad) SetVertices(vers interface{}) error {
 		}
 		obj.Vertices = make([][4]uint32, len(t)/4)
 		for i := range obj.Vertices {
-			obj.Vertices[i][0] = t[i*3]
-			obj.Vertices[i][1] = t[i*3+1]
-			obj.Vertices[i][2] = t[i*3+2]
-			obj.Vertices[i][3] = t[i*3+3]
+			obj.Vertices[i][0] = t[i*4]
+			obj.Vertices[i][1] = t[i*4+1]
+			obj.Vertices[i][2] = t[i*4+2]
+			obj.Vertices[i][3] = t[i*4+3]
 		}
 	case [][]uint32:
 		obj.Vertices = make([][4]uint32, len(t))
@@ -466,10 +466,10 @@ type SmoothQuad struct {
 func (obj *SmoothQuad) GetNormals() []uint32 {
 	ret := make([]uint32, len(obj.Normals)*4)
 	for i := range obj.Normals {
-		ret[i*3] = obj.Normals[i][0]
-		ret[i*3+1] = obj.Normals[i][1]
-		ret[i*3+2] = obj.Normals[i][2]
-		ret[i*3+3] = obj.Normals[i][3]
+		ret[i*4] = obj.Normals[i][0]
+		ret[i*4+1] = obj.Normals[i][1]
+		ret[i*4+2] = obj.Normals[i][2]
+		ret[i*4+3] = obj.Normals[i][3]
 	}
 	return ret
 }
@@ -512,10 +512,10 @@ func (obj *SmoothQuad) SetNormals(vers interface{}) error {
 		}
 		obj.Normals = make([][4]uint32, len(t)/4)
 		for i := range obj.Normals {
-			obj.Normals[i][0] = t[i*3]
-			obj.Normals[i][1] = t[i*3+1]
-			obj.Normals[i][2] = t[i*3+2]
-			obj.Normals[i][3] = t[i*3+3]
+			obj.Normals[i][0] = t[i*4]
+			obj.Normals[i][1] = t[i*4+1]
+			obj.Normals[i][2] = t[i*4+2]
+			obj.Normals[i][3] = t[i*4+3]
 		}
 	case [][]uint32:
 		obj.Normals = make([][4]uint32, len(t))
@@ -539,10 +539,10 @@ type FlatUVQuad struct {
 func (obj *FlatUVQuad) GetUvs() []uint32 {
 	ret := make([]uint32, len(obj.Uvs)*4)
 	for i := range obj.Uvs {
-		ret[i*3] = obj.Uvs[i][0]
-		ret[i*3+1] = obj.Uvs[i][1]
-		ret[i*3+2] = obj.Uvs[i][2]
-		ret[i*3+3] = obj.Uvs[i][3]
+		ret[i*4] = obj.Uvs[i][0]
+		ret[i*4+1] = obj.Uvs[i][1]
+		ret[i*4+2] = obj.Uvs[i][2]
+		ret[i*4+3] = obj.Uvs[i][3]
 	}
 	return ret
 }
@@ -585,10 +585,10 @@ func (obj *FlatUVQuad) SetUVs(vers interface{}) error {
 		}
 		obj.Uvs = make([][4]uint32, len(t)/4)
 		for i := range obj.Uvs {
-			obj.Uvs[i][0] = t[i*3]
-			obj.Uvs[i][1] = t[i*3+1]
-			obj.Uvs[i][2] = t[i*3+2]
-			obj.Uvs[i][3] = t[i*3+3]
+			obj.Uvs[i][0] = t[i*4]
+			obj.Uvs[i][1] = t[i*4+1]
+			obj.Uvs[i][2] = t[i*4+2]
+			obj.Uvs[i][3] = t[i*4+3]
 		}
 	case [][]uint32:
 		obj.Uvs = make([][4]uint32, len(t))
@@ -613,10 +613,10 @@ type SmoothUVQuad struct {
 func (obj *SmoothUVQuad) GetNormals() []uint32 {
 	ret := make([]uint32, len(obj.Normals)*4)
 	for i := range obj.Normals {
-		ret[i*3] = obj.Normals[i][0]
-		ret[i*3+1] = obj.Normals[i][1]
-		ret[i*3+2] = obj.Normals[i][2]
-		ret[i*3+3] = obj.Normals[i][3]
+		ret[i*4] = obj.Normals[i][0]
+		ret[i*4+1] = obj.Normals[i][1]
+		ret[i*4+2] = obj.Normals[i][2]
+		ret[i*4+3] = obj.Normals[i][3]
 	}
 	return ret
 }
@@ -624,10 +624,10 @@ func (obj *SmoothUVQuad) GetNormals() []uint32 {
 func (obj *SmoothUVQuad) GetUvs() []uint32 {
 	ret := make([]uint32, len(obj.Uvs)*4)
 	for i := range obj.Uvs {
-		ret[i*3] = obj.Uvs[i][0]
-		ret[i*3+1] = obj.Uvs[i][1]
-		ret[i*3+2] = obj.Uvs[i][2]
-		ret[i*3+3] = obj.Uvs[i][3]
+		ret[i*4] = obj.Uvs[i][0]
+		ret[i*4+1] = obj.Uvs[i][1]
+		ret[i*4+2] = obj.Uvs[i][2]
+		ret[i*4+3] = obj.Uvs[i][3]
 	}
 	return ret
 }
@@ -685,10 +685,10 @@ func (obj *SmoothUVQuad) SetNormals(vers interface{}) error {
 		}
 		obj.Normals = make([][4]uint32, len(t)/4)
 		for i := range obj.Normals {
-			obj.Normals[i][0] = t[i*3]
-			obj.Normals[i][1] = t[i*3+1]
-			obj.Normals[i][2] = t[i*3+2]
-			obj.Normals[i][3] = t[i*3+3]
+			obj.Normals[i][0] = t[i*4]
+			obj.Normals[i][1] = t[i*4+1]
+			obj.Normals[i][2] = t[i*4+2]
+			obj.Normals[i][3] = t[i*4+3]
 		}
 	case [][]uint32:
 		obj.Normals = make([][4]uint32, len(t))
@@ -712,10 +712,10 @@ func (obj *SmoothUVQuad) SetUVs(vers interface{}) error {
 		}
 		obj.Uvs = make([][4]uint32, len(t)/4)
 		for i := range obj.Uvs {
-			obj.Uvs[i][0] = t[i*3]
-			obj.Uvs[i][1] = t[i*3+1]
-			obj.Uvs[i][2] = t[i*3+2]
-			obj.Uvs[i][3] = t[i*3+3]
+			obj.Uvs[i][0] = t[i*4]
+			obj.Uvs[i][1] = t[i*4+1]
+			obj.Uvs[i][2] = t[i*4+2]
+			obj.Uvs[i][3] = t[i*4+3]
 		}
 	case [][]uint32:
 		obj.Uvs = make([][4]uint32, len(t))
