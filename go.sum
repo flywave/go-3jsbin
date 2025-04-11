@@ -10,8 +10,6 @@ github.com/flywave/go3d v0.0.0-20240109050628-b891a10fca74 h1:xzseEax2cw2J5r6IRg
 github.com/flywave/go3d v0.0.0-20240109050628-b891a10fca74/go.mod h1:bvblxPT+cF0zgDi71CuusPPWCwqU0SikE9ySl2NzeQw=
 github.com/go-test/deep v1.0.1 h1:UQhStjbkDClarlmv0am7OXXO4/GaPdCGiUiMTvi28sg=
 github.com/go-test/deep v1.0.1/go.mod h1:wGDj63lr65AM2AQyKZd/NYHGb0R+1RLqB8NKt3aSFNA=
-github.com/qmuntal/gltf v0.20.3 h1:9oW6IAgHROZjwBcEVgkBhH1SR/7TLlVfSn6VDr/2h3E=
-github.com/qmuntal/gltf v0.20.3/go.mod h1:ENqYfECmeaqs2BWXWe6OKtMC8ucZII6s9OHr6F5oZ94=
 github.com/xtgo/uuid v0.0.0-20140804021211-a0b114877d4c h1:3lbZUMbMiGUW/LMkfsEABsc5zNT9+b1CvsJx47JzJ8g=
 github.com/xtgo/uuid v0.0.0-20140804021211-a0b114877d4c/go.mod h1:UrdRz5enIKZ63MEE3IF9l2/ebyx59GyGgPi+tICQdmM=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
